@@ -1,0 +1,14 @@
+name: Bug report
+description: Something does not work
+labels: [bug]
+body:
+  - type: textarea
+    attributes: { label: What happened?, description: Actual vs expected behaviour }
+    validations: { required: true }
+  - type: textarea
+    attributes: { label: Steps to reproduce }
+    validations: { required: true }
+  - type: input
+    attributes: { label: Platform and version, placeholder: "Android 15 / iOS 19 / Chrome 140 / commit abc123" }
+  - type: markdown
+    attributes: { value: "Do not paste tokens, passwords or private URLs. Report vulnerabilities via Security → Report a vulnerability." }

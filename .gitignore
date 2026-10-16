@@ -1,0 +1,58 @@
+# dependencies
+node_modules/
+
+# secrets / env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+*.keystore
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+service-account*.json
+
+# user data / databases / logs / cache
+pocketbase/pb_data/
+pb_data/
+pb_public/
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.gz
+*.bak
+backups/
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.cache/
+.eslintcache
+coverage/
+
+# Expo / build
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+/ios
+/android
+.kotlin/
+*.orig.*
+*.tsbuildinfo
+
+# IDE / OS / agents
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+.claude/
+.cursor/
+CLAUDE.md

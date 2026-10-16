@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "inwentarz-domowy",
+    "slug": "inwentarz-domowy",
+    "version": "1.0.0",
+    "scheme": "inwentarzdomowy",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lowcaboleni.inwentarzdomowy"
+    },
+    "android": {
+      "package": "com.lowcaboleni.inwentarzdomowy",
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "Inwentarz Domowy",
+      "shortName": "Inwentarz",
+      "description": "Wiesz gdzie trzymasz swoje rzeczy",
+      "display": "standalone",
+      "orientation": "portrait",
+      "themeColor": "#2563eb",
+      "backgroundColor": "#ffffff",
+      "lang": "pl",
+      "startUrl": "/"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Aplikacja potrzebuje dostepu do zdjec, aby dodac fotografie przedmiotu.",
+          "cameraPermission": "Aplikacja potrzebuje dostepu do aparatu, aby zrobic zdjecie przedmiotu.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-localization",
+      "expo-web-browser",
+      "expo-sharing"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "cc4cc66c-b224-41b4-af31-73dbb1b67ecc"
+      }
+    },
+    "owner": "lowcaboleni"
+  }
+}
