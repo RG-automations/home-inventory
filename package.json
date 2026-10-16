@@ -13,7 +13,7 @@
     "expo-image-picker": "~57.0.20",
     "expo-linking": "~57.0.6",
     "expo-localization": "~57.0.2",
-    "expo-router": "~57.0.14",
+    "expo-router": "~58.0.21",
     "expo-sharing": "~57.0.14",
     "expo-status-bar": "~57.0.1",
     "expo-web-browser": "~57.0.3",
