@@ -1,0 +1,9 @@
+services:
+  inwentarz-domowy:
+    build: .
+    container_name: inwentarz_domowy
+    restart: unless-stopped
+    # Port 8088 na hoscie.
+    # Nie wystawiaj bez HTTPS (reverse proxy lub Tailscale Serve).
+    ports:
+      - '8088:80'
