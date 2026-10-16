@@ -28,6 +28,14 @@
 - Per-user data enforced by database access rules; data export (GDPR)
 - Self-hosting with Docker + nginx + PocketBase
 
+## Screenshots
+
+Demo data only.
+
+| Places | Inside a place | Search | Dark mode |
+|:--:|:--:|:--:|:--:|
+| <img src="docs/screenshots/home.png" width="200" /> | <img src="docs/screenshots/garage.png" width="200" /> | <img src="docs/screenshots/search.png" width="200" /> | <img src="docs/screenshots/home-dark.png" width="200" /> |
+
 ## Architecture
 
 ```mermaid
