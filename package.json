@@ -6,7 +6,7 @@
     "@react-native-async-storage/async-storage": "^3.1.1",
     "expo": "~57.0.14",
     "expo-auth-session": "~57.0.7",
-    "expo-constants": "~57.0.12",
+    "expo-constants": "~58.0.10",
     "expo-dev-client": "~57.0.13",
     "expo-file-system": "~57.0.5",
     "expo-image-manipulator": "~57.0.13",
