@@ -53,7 +53,12 @@ export type UsageCounts = {
 };
 
 async function countRecords(collection: string, filter?: string): Promise<number> {
-  const result = await pb.collection(collection).getList(1, 1, { filter, fields: 'id' });
+  const result = await pb.collection(collection).getList(1, 1, {
+    filter,
+    fields: 'id',
+    // Parallel counts hit the same endpoint; without this PocketBase auto-cancels all but the last.
+    requestKey: null,
+  });
   return result.totalItems;
 }
 
