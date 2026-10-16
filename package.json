@@ -18,7 +18,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-web-browser": "~57.0.3",
     "i18next": "^26.3.6",
-    "jszip": "^3.10.1",
+    "jszip": "^3.10.2",
     "pocketbase": "^0.26.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
