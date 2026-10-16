@@ -1,5 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
-// Schemat Inwentarza Domowego (odpowiednik supabase/*.sql + polityk RLS).
+// Schemat Inwentarza Domowego (tabele i reguly dostepu).
 // Zastosuje sie sam przy starcie PocketBase. Pisany pod PocketBase 0.23+ (JS migrations).
 
 migrate((app) => {
