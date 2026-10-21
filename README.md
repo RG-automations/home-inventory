@@ -75,6 +75,13 @@ docker compose -f deploy/docker-compose.yml up -d --build
 
 `EXPO_PUBLIC_POCKETBASE_URL` is compiled into the bundle, so set it **before** building. Put everything behind HTTPS in production.
 
+## Self-hosting notes
+
+- **HTTPS:** the web container listens on `127.0.0.1:8088` only. Put a reverse proxy (or Tailscale Serve) with HTTPS in front of it; do the same for PocketBase (`127.0.0.1:8090`).
+- **Open signup:** anyone who can reach your PocketBase can create an account, and e-mail is not verified. The migrations switch on PocketBase's built-in rate limiter; check it under *Settings → Application* in `/_/` and tune it for your server. Uploads are capped at 15 MB per photo.
+- **Migrations:** copy the whole `pocketbase/pb_migrations` folder to the server and restart PocketBase; new migrations apply on start. Back up `pb_data` first.
+- **Access rules test:** `PB_URL=http://127.0.0.1:8090 npm run test:rules` checks the rules against a **throwaway** instance (it creates accounts, so never point it at real data).
+
 ## Configuration
 
 | Variable | Description | Default |
