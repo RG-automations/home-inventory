@@ -1,17 +1,7 @@
 import { getCurrentUserOrThrow, pb } from './pocketbase';
 import { toItem } from './locations';
-import { getPhotoUrl, removePhotos, uploadPhoto } from './photos';
+import { removePhotos } from './photos';
 import { invalidateSignedUrl } from './signed-url-cache';
-
-export async function uploadItemPhoto(localUri: string): Promise<string> {
-  // Zapisujemy odwolanie do zdjecia (nie adres) - pliki sa chronione,
-  // wiec do wyswietlenia potrzebny jest adres z tokenem (getItemPhotoUrl).
-  return uploadPhoto(localUri);
-}
-
-export async function getItemPhotoUrl(photoRef: string): Promise<string | null> {
-  return getPhotoUrl(photoRef);
-}
 
 export async function createItem(params: {
   name: string;

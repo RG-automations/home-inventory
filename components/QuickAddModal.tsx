@@ -15,7 +15,8 @@ import UpgradeModal from './UpgradeModal';
 import { useAlertInfo } from '../lib/confirm';
 import { useDataRefresh } from '../lib/data-refresh';
 import { describeError } from '../lib/error-message';
-import { createItem, uploadItemPhoto } from '../lib/items';
+import { createItem } from '../lib/items';
+import { uploadPhoto } from '../lib/photos';
 import type { Location } from '../lib/locations';
 import { useSubscription } from '../lib/subscription-context';
 import type { Theme } from '../lib/theme';
@@ -81,7 +82,7 @@ export default function QuickAddModal({ visible, onClose, onSaved }: Props) {
     setIsSaving(true);
 
     try {
-      const photoUrl = photoUri ? await uploadItemPhoto(photoUri) : null;
+      const photoUrl = photoUri ? await uploadPhoto(photoUri) : null;
       await createItem({
         name: name.trim(),
         description: description.trim() || null,

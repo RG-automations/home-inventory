@@ -14,7 +14,8 @@ import AnimatedPressable from './AnimatedPressable';
 import UpgradeModal from './UpgradeModal';
 import { useDataRefresh } from '../lib/data-refresh';
 import { describeError } from '../lib/error-message';
-import { createItem, uploadItemPhoto } from '../lib/items';
+import { createItem } from '../lib/items';
+import { uploadPhoto } from '../lib/photos';
 import { useSubscription } from '../lib/subscription-context';
 import type { Theme } from '../lib/theme';
 import { useTheme } from '../lib/theme-context';
@@ -63,7 +64,7 @@ export default function AddItemModal({ visible, locationId, onClose, onSaved }: 
     setIsSaving(true);
 
     try {
-      const photoUrl = photoUri ? await uploadItemPhoto(photoUri) : null;
+      const photoUrl = photoUri ? await uploadPhoto(photoUri) : null;
       await createItem({
         name: name.trim(),
         description: description.trim() || null,

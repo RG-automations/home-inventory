@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Image, Text, type ImageStyle, type StyleProp, type TextStyle } from 'react-native';
-import { getItemPhotoUrl } from '../lib/items';
+import { getPhotoUrl } from '../lib/photos';
 
 type Props = {
   photoPath: string | null;
@@ -15,7 +15,7 @@ export default function ItemThumbnail({ photoPath, style, fallbackIconStyle }: P
     let isMounted = true;
 
     if (photoPath) {
-      getItemPhotoUrl(photoPath).then((url) => {
+      getPhotoUrl(photoPath).then((url) => {
         if (isMounted) setSignedUrl(url);
       });
     } else {

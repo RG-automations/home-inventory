@@ -16,7 +16,8 @@ import UpgradeModal from './UpgradeModal';
 import { useAlertInfo } from '../lib/confirm';
 import { useDataRefresh } from '../lib/data-refresh';
 import { describeError } from '../lib/error-message';
-import { uploadItemPhoto, updateItem } from '../lib/items';
+import { updateItem } from '../lib/items';
+import { uploadPhoto } from '../lib/photos';
 import { getLocationById, type Item, type Location } from '../lib/locations';
 import { useSubscription } from '../lib/subscription-context';
 import type { Theme } from '../lib/theme';
@@ -75,7 +76,7 @@ export default function EditItemModal({ visible, item, onClose, onSaved }: Props
     setIsSaving(true);
 
     try {
-      const photoUrl = newPhotoUri ? await uploadItemPhoto(newPhotoUri) : item.photo_url;
+      const photoUrl = newPhotoUri ? await uploadPhoto(newPhotoUri) : item.photo_url;
       await updateItem({
         id: item.id,
         name: name.trim(),
