@@ -56,3 +56,6 @@ Thumbs.db
 .claude/
 .cursor/
 CLAUDE.md
+
+# Syncthing conflict copies
+*.sync-conflict-*
