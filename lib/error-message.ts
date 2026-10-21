@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next';
+import { FREE_LIMITS } from './subscription';
 
 /** PocketBase kryje szczegoly (np. "Failed to create record") w `response.data` — wyciagamy je. */
 function pocketbaseDetails(error: unknown): string | null {
@@ -21,6 +22,13 @@ export function describeError(error: unknown, t: TFunction, fallbackKey: string)
   if (error instanceof Error) {
     if (error.message === 'NOT_AUTHENTICATED') {
       return t('common.notAuthenticated');
+    }
+    // Server-side free-tier limit (pocketbase/pb_hooks/free_limits.pb.js).
+    if (error.message === 'FREE_LIMIT_ITEMS') {
+      return t('upgrade.itemsLimitReached', { limit: FREE_LIMITS.items });
+    }
+    if (error.message === 'FREE_LIMIT_PHOTOS') {
+      return t('upgrade.photosLimitReached', { limit: FREE_LIMITS.photos });
     }
     if (error.message === 'CANNOT_MOVE_INTO_ITSELF' || error.message === 'CANNOT_MOVE_INTO_OWN_SUBTREE') {
       return t('location.cannotMoveIntoOwnSubtree');

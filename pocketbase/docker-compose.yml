@@ -10,7 +10,8 @@ services:
     volumes:
       - ./pb_data:/pb_data
       - ./pb_migrations:/pb_migrations
-    command: ['--dir=/pb_data', '--migrationsDir=/pb_migrations', '--publicDir=/pb_public']
+      - ./pb_hooks:/pb_hooks
+    command: ['--dir=/pb_data', '--migrationsDir=/pb_migrations', '--hooksDir=/pb_hooks', '--publicDir=/pb_public']
     healthcheck:
       test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:8090/api/health']
       interval: 30s
