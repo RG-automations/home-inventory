@@ -34,7 +34,7 @@ export async function uploadPhoto(localUri: string): Promise<string> {
   const extension = MIME_TO_EXTENSION[contentType] ?? 'jpg';
 
   const form = new FormData();
-  form.append('user', user.id);
+  form.append('user_id', user.id);
   form.append('file', blob, `${Date.now()}.${extension}`);
 
   const record = await pb.collection(PHOTOS_COLLECTION).create(form);

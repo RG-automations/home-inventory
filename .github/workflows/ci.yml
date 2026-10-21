@@ -28,3 +28,22 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: gitleaks/gitleaks-action@v3
         env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version: 22 }
+      - name: Start PocketBase with the repo migrations
+        run: |
+          docker run -d --name pb -p 8090:8090             -v "$PWD/pocketbase/pb_migrations:/pb_migrations"             ghcr.io/muchobien/pocketbase:latest             --dir=/pb_data --migrationsDir=/pb_migrations
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8090/api/health && exit 0
+            sleep 2
+          done
+          docker logs pb
+          exit 1
+      - run: npm run test:rules
+        env: { PB_URL: "http://127.0.0.1:8090" }
+      - if: failure()
+        run: docker logs pb
