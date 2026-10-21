@@ -34,9 +34,11 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with: { node-version: 22 }
-      - name: Start PocketBase with the repo migrations
+      - name: Start PocketBase with the repo migrations and hooks
         run: |
-          docker run -d --name pb -p 8090:8090             -v "$PWD/pocketbase/pb_migrations:/pb_migrations"             ghcr.io/muchobien/pocketbase:latest             --dir=/pb_data --migrationsDir=/pb_migrations
+          docker volume create pbdata
+          docker run --rm -v pbdata:/pb_data ghcr.io/muchobien/pocketbase:latest             superuser upsert ci-admin@example.com Ci-admin-password-123 --dir=/pb_data
+          docker run -d --name pb -p 8090:8090 -v pbdata:/pb_data             -v "$PWD/pocketbase/pb_migrations:/pb_migrations"             -v "$PWD/pocketbase/pb_hooks:/pb_hooks"             ghcr.io/muchobien/pocketbase:latest             --dir=/pb_data --migrationsDir=/pb_migrations --hooksDir=/pb_hooks
           for i in $(seq 1 30); do
             curl -sf http://127.0.0.1:8090/api/health && exit 0
             sleep 2
@@ -44,6 +46,9 @@ jobs:
           docker logs pb
           exit 1
       - run: npm run test:rules
-        env: { PB_URL: "http://127.0.0.1:8090" }
+        env:
+          PB_URL: "http://127.0.0.1:8090"
+          PB_SUPERUSER_EMAIL: ci-admin@example.com
+          PB_SUPERUSER_PASSWORD: Ci-admin-password-123
       - if: failure()
         run: docker logs pb

@@ -1,6 +1,7 @@
-// Black-box checks of the PocketBase access rules. Needs a running instance with the
+// Black-box checks of the PocketBase access rules and free-tier limits. Needs a running instance with the
 // migrations from pocketbase/pb_migrations applied (throwaway data only: it creates accounts).
 //   PB_URL=http://127.0.0.1:8090 npm run test:rules
+// Optional: PB_SUPERUSER_EMAIL / PB_SUPERUSER_PASSWORD enable the 'premium is not limited' check.
 const PB = process.env.PB_URL ?? 'http://127.0.0.1:8090';
 const PASSWORD = 'Test-password-12345';
 // 1x1 transparent PNG
@@ -14,7 +15,7 @@ async function call(method, path, { token, json, form } = {}) {
       headers: { ...(token && { Authorization: token }), ...(json && { 'Content-Type': 'application/json' }) },
       body: json ? JSON.stringify(json) : form,
     });
-    if (res.status === 429 && attempt < 5) {
+    if (res.status === 429 && attempt < 12) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       continue;
     }
@@ -69,6 +70,36 @@ check("other user cannot read someone's item", stolen.status === 404 || stolen.s
 
 const selfTier = await call('PATCH', `collections/users/records/${a.id}`, { token: a.token, json: { tier: 'lifetime' } });
 check('user cannot upgrade own tier', selfTier.status >= 400 && selfTier.status < 500, `status ${selfTier.status}`);
+
+// --- free-tier limits (pocketbase/pb_hooks/free_limits.pb.js) ---
+const FREE_ITEMS = 50;
+const FREE_PHOTOS = 10;
+const c = await signUp();
+const cPlace = await call('POST', 'collections/locations/records', { token: c.token, json: { user_id: c.id, name: 'Limits' } });
+const newItem = (n, photo = '') =>
+  call('POST', 'collections/items/records', { token: c.token, json: { user_id: c.id, location_id: cPlace.body.id, name: 'i' + n, photo_url: photo } });
+
+let accepted = 0;
+for (let i = 0; i < FREE_PHOTOS; i += 1) accepted += (await newItem(i, 'p' + i + '/f.png')).status === 200 ? 1 : 0;
+check('free user can create items with photos up to the photo limit', accepted === FREE_PHOTOS, 'accepted ' + accepted);
+
+const overPhoto = await call('POST', 'collections/photos/records', { token: c.token, form: photoForm(c.id) });
+check('free user cannot upload a photo over the limit', overPhoto.status === 400 && JSON.stringify(overPhoto.body).includes('FREE_LIMIT_PHOTOS'), 'status ' + overPhoto.status + ' ' + JSON.stringify(overPhoto.body));
+
+for (let i = FREE_PHOTOS; i < FREE_ITEMS; i += 1) accepted += (await newItem(i)).status === 200 ? 1 : 0;
+check('free user can create up to the item limit', accepted === FREE_ITEMS, 'accepted ' + accepted);
+
+const overItem = await newItem(FREE_ITEMS);
+check('free user cannot create an item over the limit', overItem.status === 400 && JSON.stringify(overItem.body).includes('FREE_LIMIT_ITEMS'), 'status ' + overItem.status + ' ' + JSON.stringify(overItem.body));
+
+if (process.env.PB_SUPERUSER_EMAIL && process.env.PB_SUPERUSER_PASSWORD) {
+  const su = await call('POST', 'collections/_superusers/auth-with-password', { json: { identity: process.env.PB_SUPERUSER_EMAIL, password: process.env.PB_SUPERUSER_PASSWORD } });
+  await call('PATCH', 'collections/users/records/' + c.id, { token: su.body.token, json: { tier: 'lifetime' } });
+  const premiumItem = await newItem(FREE_ITEMS + 1);
+  check('lifetime user is not limited', premiumItem.status === 200, 'status ' + premiumItem.status);
+} else {
+  console.log("SKIP  lifetime user is not limited (set PB_SUPERUSER_EMAIL / PB_SUPERUSER_PASSWORD)");
+}
 
 if (failed > 0) {
   console.error(`\n${failed} check(s) failed`);
