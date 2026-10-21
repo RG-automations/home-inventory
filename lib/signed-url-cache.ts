@@ -27,13 +27,14 @@ export async function getCachedSignedUrl(
   const inFlight = pending.get(path);
   if (inFlight) return inFlight;
 
-  const request = fetchFn(path).then((url) => {
-    pending.delete(path);
-    if (url) {
-      cache.set(path, { url, expiresAt: Date.now() + CACHE_TTL_MS });
-    }
-    return url;
-  });
+  const request = fetchFn(path)
+    .then((url) => {
+      if (url) {
+        cache.set(path, { url, expiresAt: Date.now() + CACHE_TTL_MS });
+      }
+      return url;
+    })
+    .finally(() => pending.delete(path));
 
   pending.set(path, request);
   return request;

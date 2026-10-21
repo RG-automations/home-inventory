@@ -1,5 +1,5 @@
 import { getCurrentUserOrThrow, pb } from './pocketbase';
-import { getPhotoUrl, removePhotos, uploadPhoto } from './photos';
+import { removePhotos } from './photos';
 import { invalidateSignedUrl } from './signed-url-cache';
 
 export type Location = {
@@ -160,15 +160,6 @@ export async function moveLocation(id: string, newParentId: string | null) {
   await pb.collection('locations').update(id, { parent_id: newParentId ?? '' });
 }
 
-export async function uploadLocationPhoto(localUri: string): Promise<string> {
-  // Zdjecia miejsc i przedmiotow trafiaja do tej samej kolekcji "photos".
-  return uploadPhoto(localUri);
-}
-
-export async function getLocationPhotoUrl(photoRef: string): Promise<string | null> {
-  return getPhotoUrl(photoRef);
-}
-
 export async function updateLocation(params: {
   id: string;
   name: string;
@@ -288,8 +279,9 @@ export async function searchItems(query: string): Promise<ItemSearchResult[]> {
     })
     .join(' || ');
 
-  const result = await pb.collection('items').getList(1, 30, {
+  const result = await pb.collection('items').getList(1, 100, {
     filter: pb.filter(filter, params),
+    sort: 'name',
   });
 
   return withLocationPaths(result.items.map(toItem).sort(compareByName));

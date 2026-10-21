@@ -7,12 +7,11 @@ import { describeError } from '../lib/error-message';
 import {
   collectSubtreeIds,
   getLocationById,
-  getLocationPhotoUrl,
   moveLocation,
   updateLocation,
-  uploadLocationPhoto,
   type Location,
 } from '../lib/locations';
+import { getPhotoUrl, uploadPhoto } from '../lib/photos';
 import { useSubscription } from '../lib/subscription-context';
 import type { Theme } from '../lib/theme';
 import { useTheme } from '../lib/theme-context';
@@ -57,7 +56,7 @@ export default function EditLocationModal({ visible, location, onClose, onSaved 
       setNewParentId(undefined);
 
       if (location.photo_url) {
-        getLocationPhotoUrl(location.photo_url).then(setExistingPhotoUrl);
+        getPhotoUrl(location.photo_url).then(setExistingPhotoUrl);
       } else {
         setExistingPhotoUrl(null);
       }
@@ -101,7 +100,7 @@ export default function EditLocationModal({ visible, location, onClose, onSaved 
       let photoUrl = location.photo_url;
 
       if (photoUri) {
-        photoUrl = await uploadLocationPhoto(photoUri);
+        photoUrl = await uploadPhoto(photoUri);
       } else if (hasRemovedPhoto) {
         photoUrl = null;
       }
