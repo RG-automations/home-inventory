@@ -21,7 +21,7 @@
     "jszip": "^3.10.2",
     "pocketbase": "^0.26.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react-dom": "19.3.1",
     "react-i18next": "^17.1.0",
     "react-native": "0.86.3",
     "react-native-gesture-handler": "~2.32.0",
@@ -36,7 +36,7 @@
     "typescript": "~6.0.3"
   },
   "overrides": {
-    "react-dom": "19.2.3"
+    "react-dom": "19.3.1"
   },
   "scripts": {
     "start": "expo start",
